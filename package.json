@@ -1,0 +1,14 @@
+{
+  "name": "gotailwind",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Asynchronous Python client for Tailwind garage door openeners",
+  "scripts": {
+    "prettier": "prettier --write **/*.{json,js,md,yml,yaml}"
+  },
+  "author": "Franck Nijhof <opensource@frenck.dev>",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "3.1.0"
+  }
+}
