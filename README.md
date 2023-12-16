@@ -30,6 +30,9 @@ Known compatible and tested Tailwind devices:
 
 - [Tailwind iQ3](https://gotailwind.com/products/iq3-smart-garage-controller)
 
+> [!IMPORTANT]  
+> This library requires your Tailwind device to run at least firmware version v10.10.
+
 For the development of this package, the hardware was kindly sponsored
 and provided by [Tailwind](https://gotailwind.com/), thank you! ❤️
 
