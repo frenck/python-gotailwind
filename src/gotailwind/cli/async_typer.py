@@ -1,4 +1,4 @@
-"""Asynchronous Python client for Tailwind garage door openeners.
+"""Asynchronous Python client for Tailwind garage door openers.
 
 Adaptation of the snippet/code from:
 - https://github.com/tiangolo/typer/issues/88#issuecomment-1613013597

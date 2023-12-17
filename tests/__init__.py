@@ -1,4 +1,4 @@
-"""Asynchronous Python client for Tailwind garage door openeners."""
+"""Asynchronous Python client for Tailwind garage door openers."""
 from pathlib import Path
 
 

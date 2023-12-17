@@ -10,7 +10,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-description = "Asynchronous Python client for Tailwind garage door openeners."
+description = "Asynchronous Python client for Tailwind garage door openers."
 documentation = "https://github.com/frenck/python-gotailwind"
 homepage = "https://github.com/frenck/python-gotailwind"
 keywords = ["gotailwind", "tailwind", "iq3", "myq", "chamberlain", "craftsman", "liftmaster"]

@@ -1,4 +1,4 @@
-"""Asynchronous Python client for Tailwind garage door openeners."""
+"""Asynchronous Python client for Tailwind garage door openers."""
 import asyncio
 import sys
 from typing import Annotated

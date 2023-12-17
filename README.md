@@ -1,4 +1,4 @@
-# Python: Asynchronous client for Tailwind garage door openeners
+# Python: Asynchronous client for Tailwind garage door openers
 
 [![GitHub Release][releases-shield]][releases]
 [![Python Versions][python-versions-shield]][pypi]
@@ -15,7 +15,7 @@
 
 [![Support Frenck on Patreon][patreon-shield]][patreon]
 
-Asynchronous Python client for Tailwind garage door openeners.
+Asynchronous Python client for Tailwind garage door openers.
 
 ## About
 

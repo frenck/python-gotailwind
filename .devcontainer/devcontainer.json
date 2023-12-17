@@ -49,6 +49,6 @@
     "ghcr.io/devcontainers/features/node:1": {}
   },
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
-  "name": "Asynchronous Python client for Tailwind garage door openeners",
+  "name": "Asynchronous Python client for Tailwind garage door openers",
   "updateContentCommand": ". ${NVM_DIR}/nvm.sh && nvm install && nvm use && npm install && poetry install --extras cli && poetry run pre-commit install"
 }
