@@ -102,14 +102,7 @@ class TailwindResponse(BaseModel):
 
 @dataclass(kw_only=True)
 class TailwindDoor(BaseModel):
-    """Object holding the door status of a Tailwind connected garage door.
-
-    Attributes
-    ----------
-        state: Current status of the garage door.
-        locked_out: If the garage door controls are locked out for safety.
-        status_report_enabled: If status reports are enabled.
-    """
+    """Object holding the door status of a Tailwind connected garage door."""
 
     disabled: bool
     door_id: str
