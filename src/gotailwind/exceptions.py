@@ -35,3 +35,7 @@ class TailwindDoorDisabledError(TailwindDoorOperationError):
 
 class TailwindDoorLockedOutError(TailwindDoorOperationError):
     """Tailwind locked out door exception."""
+
+
+class TailwindUnsupportedFirmwareVersionError(TailwindError):
+    """Tailwind unsupported version exception."""

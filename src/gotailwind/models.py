@@ -10,12 +10,17 @@ from mashumaro.mixins.orjson import DataClassORJSONMixin
 from mashumaro.types import SerializationStrategy
 
 from gotailwind.const import (
+    MIN_REQUIRED_FIRMWARE_VERSION,
     TailwindDoorOperationCommand,
     TailwindDoorState,
     TailwindRequestType,
     TailwindResponseResult,
 )
-from gotailwind.exceptions import TailwindAuthenticationError, TailwindResponseError
+from gotailwind.exceptions import (
+    TailwindAuthenticationError,
+    TailwindResponseError,
+    TailwindUnsupportedFirmwareVersionError,
+)
 from gotailwind.util import tailwind_device_id_to_mac_address
 
 _RequestData = TypeVar("_RequestData")
@@ -134,6 +139,14 @@ class TailwindDeviceStatus(TailwindResponse):
         cls: type[TailwindDeviceStatus], d: dict[Any, Any]
     ) -> dict[Any, Any]:
         """Modify data before deserialization."""
+        if (version := d.get("fw_ver")) and version < MIN_REQUIRED_FIRMWARE_VERSION:
+            msg = (
+                f"Unsupported firmware version {version}. "
+                f"Minimum required version is {MIN_REQUIRED_FIRMWARE_VERSION}. "
+                f"Please update your Tailwind device."
+            )
+            raise TailwindUnsupportedFirmwareVersionError(msg)
+
         super().__pre_deserialize__(d)
         for door_id, door in d.get("data", {}).items():
             door["door_id"] = door_id

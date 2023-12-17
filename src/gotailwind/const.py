@@ -2,8 +2,14 @@
 
 from enum import StrEnum, auto
 
+from awesomeversion import AwesomeVersion, AwesomeVersionStrategy
+
 OPERATION_WAIT_CYCLES = 120
 OPERATION_CYCLE_WAIT = 0.5
+
+MIN_REQUIRED_FIRMWARE_VERSION = AwesomeVersion(
+    "10.10", ensure_strategy=AwesomeVersionStrategy.SIMPLEVER
+)
 
 
 class TailwindDoorState(StrEnum):

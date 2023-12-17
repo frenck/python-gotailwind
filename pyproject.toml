@@ -26,6 +26,7 @@ version = "0.0.0"
 
 [tool.poetry.dependencies]
 aiohttp = ">=3.0.0"
+awesomeversion = ">=22.8.0"
 backoff = ">=2.2.1"
 mashumaro = ">=3.10"
 orjson = ">=3.9.8"
