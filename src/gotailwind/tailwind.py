@@ -46,7 +46,7 @@ _TailwindRequestT = TypeVar("_TailwindRequestT", bound=TailwindRequest[Any, Any]
 
 @dataclass(kw_only=True)
 class Tailwind:
-    """Main class for handling connections with an Tailwind garage door opener."""
+    """Main class for handling connections with a Tailwind garage door opener."""
 
     host: str
     token: str

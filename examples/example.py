@@ -7,7 +7,7 @@ from gotailwind import Tailwind, TailwindDoorOperationCommand, TailwindDoorState
 
 
 async def main() -> None:
-    """Show example of programmatically control an Tailwind garage door."""
+    """Show example of programmatically control a Tailwind garage door."""
     async with Tailwind(host="192.168.1.123", token="123456") as tailwind:
         # Get the device status
         status = await tailwind.status()

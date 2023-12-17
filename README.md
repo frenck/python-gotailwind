@@ -21,9 +21,9 @@ Asynchronous Python client for Tailwind garage door openers.
 
 This package allows you to control and monitor [Tailwind devices](https://gotailwind.com/)
 programmatically. It is mainly created to allow third-party programs to
-automate the behavior of an Tailwind device.
+automate the behavior of a Tailwind device.
 
-Additionally, this package contains an CLI tools, which can be used standalone,
+Additionally, this package contains a CLI tool, which can be used standalone,
 proving a command-line interface to control and monitor Tailwind devices.
 
 Known compatible and tested Tailwind devices:
@@ -34,7 +34,7 @@ Known compatible and tested Tailwind devices:
 > This library requires your Tailwind device to run at least firmware version v10.10.
 
 For the development of this package, the hardware was kindly sponsored
-and provided by [Tailwind](https://gotailwind.com/), thank you! ❤️
+and provided by [Tailwind](https://gotailwind.com/); thank you! ❤️
 
 ## Installation
 
@@ -51,10 +51,10 @@ pip install gotailwind[cli]
 
 ## CLI usage
 
-The tailwind CLI tool provided in this library provides all functionality this
-library provides, but from the command-line.
+The tailwind CLI tool provided in this library provides all the functionalities
+this library provides but from the command line.
 
-The CLI comes with a built-in help, which can be accessed by using the `--help`
+The CLI comes with built-in help, which can be accessed by using the `--help`
 
 ```bash
 tailwind --help
@@ -78,7 +78,7 @@ To open a door:
 tailwind open --host 192.168.1.123
 ```
 
-For more details, access the build in help of the CLI using the `--help` flag.
+For more details, access the build-in help of the CLI using the `--help` flag.
 
 ## Python usage
 
@@ -91,7 +91,7 @@ from gotailwind import Tailwind, TailwindDoorOperationCommand, TailwindDoorState
 
 
 async def main() -> None:
-    """Show example of programmatically control an Tailwind garage door."""
+    """Show example of programmatically control a Tailwind garage door."""
     async with Tailwind(host="192.168.1.123", token="123456") as tailwind:
         # Get the device status
         status = await tailwind.status()
@@ -148,9 +148,9 @@ We've set up a separate document for our
 
 Thank you for being involved! :heart_eyes:
 
-## Setting up development environment
+## Setting up a development environment
 
-The easiest way to start, is by opening a CodeSpace here on GitHub, or by using
+The easiest way to start is by opening a CodeSpace here on GitHub, or by using
 the [Dev Container][devcontainer] feature of Visual Studio Code.
 
 [![Open in Dev Containers][devcontainer-shield]][devcontainer]
