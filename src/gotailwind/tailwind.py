@@ -146,7 +146,7 @@ class Tailwind:
             door = door.index
         door_status = await self.door_status(door=door)
 
-        if door_status.lockout:
+        if door_status.locked_out:
             msg = f"Door {door} is locked out"
             raise TailwindDoorLockedOutError(msg)
 

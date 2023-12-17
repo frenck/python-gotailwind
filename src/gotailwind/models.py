@@ -107,14 +107,14 @@ class TailwindDoor(BaseModel):
     Attributes
     ----------
         state: Current status of the garage door.
-        lockout: If the garage door controls are locked out for safety.
+        locked_out: If the garage door controls are locked out for safety.
         status_report_enabled: If status reports are enabled.
     """
 
     disabled: bool
     door_id: str
     index: int
-    lockout: bool = field(metadata=field_options(alias="lockup"))
+    locked_out: bool = field(metadata=field_options(alias="lockup"))
     state: TailwindDoorState = field(metadata=field_options(alias="status"))
 
 
