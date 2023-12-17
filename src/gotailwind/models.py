@@ -102,19 +102,12 @@ class TailwindResponse(BaseModel):
 
 @dataclass(kw_only=True)
 class TailwindDoor(BaseModel):
-    """Object holding the door status of a Tailwind connected garage door.
-
-    Attributes
-    ----------
-        state: Current status of the garage door.
-        lockout: If the garage door controls are locked out for safety.
-        status_report_enabled: If status reports are enabled.
-    """
+    """Object holding the door status of a Tailwind connected garage door."""
 
     disabled: bool
     door_id: str
     index: int
-    lockout: bool = field(metadata=field_options(alias="lockup"))
+    locked_out: bool = field(metadata=field_options(alias="lockup"))
     state: TailwindDoorState = field(metadata=field_options(alias="status"))
 
 

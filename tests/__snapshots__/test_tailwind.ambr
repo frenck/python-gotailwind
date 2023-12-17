@@ -9,7 +9,7 @@
   })
 # ---
 # name: test_door_status[1][response]
-  TailwindDoor(disabled=False, door_id='door2', index=1, lockout=False, state=<TailwindDoorState.OPEN: 'open'>)
+  TailwindDoor(disabled=False, door_id='door2', index=1, locked_out=False, state=<TailwindDoorState.OPEN: 'open'>)
 # ---
 # name: test_door_status[door1][request]
   dict({
@@ -21,7 +21,7 @@
   })
 # ---
 # name: test_door_status[door1][response]
-  TailwindDoor(disabled=False, door_id='door1', index=0, lockout=False, state=<TailwindDoorState.OPEN: 'open'>)
+  TailwindDoor(disabled=False, door_id='door1', index=0, locked_out=False, state=<TailwindDoorState.OPEN: 'open'>)
 # ---
 # name: test_identify[request]
   dict({
@@ -46,7 +46,7 @@
   })
 # ---
 # name: test_operate_close[response]
-  TailwindDoor(disabled=False, door_id='door1', index=0, lockout=False, state=<TailwindDoorState.CLOSED: 'close'>)
+  TailwindDoor(disabled=False, door_id='door1', index=0, locked_out=False, state=<TailwindDoorState.CLOSED: 'close'>)
 # ---
 # name: test_operate_open[request]
   dict({
@@ -62,7 +62,7 @@
   })
 # ---
 # name: test_operate_open[response]
-  TailwindDoor(disabled=False, door_id='door1', index=0, lockout=False, state=<TailwindDoorState.OPEN: 'open'>)
+  TailwindDoor(disabled=False, door_id='door1', index=0, locked_out=False, state=<TailwindDoorState.OPEN: 'open'>)
 # ---
 # name: test_operate_took_to_long[request]
   dict({
@@ -81,7 +81,7 @@
   '{"dev_id":"_3c_e9_e_6d_21_84_","fw_ver":"10.10","night_mode_en":0,"product":"iQ3","proto_ver":"0.1","led_brightness":100,"door_num":2,"data":{"door1":{"disabled":0,"door_id":"door1","index":0,"lockup":0,"status":"open"},"door2":{"disabled":0,"door_id":"door2","index":1,"lockup":0,"status":"open"}}}'
 # ---
 # name: test_status[object]
-  TailwindDeviceStatus(device_id='_3c_e9_e_6d_21_84_', firmware_version='10.10', night_mode_enabled=False, product='iQ3', protocol_version='0.1', led_brightness=100, number_of_doors=2, doors={'door1': TailwindDoor(disabled=False, door_id='door1', index=0, lockout=False, state=<TailwindDoorState.OPEN: 'open'>), 'door2': TailwindDoor(disabled=False, door_id='door2', index=1, lockout=False, state=<TailwindDoorState.OPEN: 'open'>)})
+  TailwindDeviceStatus(device_id='_3c_e9_e_6d_21_84_', firmware_version='10.10', night_mode_enabled=False, product='iQ3', protocol_version='0.1', led_brightness=100, number_of_doors=2, doors={'door1': TailwindDoor(disabled=False, door_id='door1', index=0, locked_out=False, state=<TailwindDoorState.OPEN: 'open'>), 'door2': TailwindDoor(disabled=False, door_id='door2', index=1, locked_out=False, state=<TailwindDoorState.OPEN: 'open'>)})
 # ---
 # name: test_status_led[request]
   dict({

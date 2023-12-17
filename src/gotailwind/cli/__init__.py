@@ -170,14 +170,14 @@ async def status(
     doors_table = Table(title="Garage doors", header_style="cyan bold", show_lines=True)
     doors_table.add_column("Door")
     doors_table.add_column("State", style="bold")
-    doors_table.add_column("Lockout")
+    doors_table.add_column("Locked out")
     doors_table.add_column("Disabled")
 
     for door in device_status.doors.values():
         doors_table.add_row(
             str(door.index + 1),
             "[red]Open" if door.state == TailwindDoorState.OPEN else "[green]Closed",
-            "[red bold]Yes" if door.lockout else "No",
+            "[red bold]Yes" if door.locked_out else "No",
             "[red bold]Yes" if door.disabled else "No",
         )
 
