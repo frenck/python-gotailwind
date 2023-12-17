@@ -16,6 +16,7 @@ from .exceptions import (
     TailwindDoorUnknownError,
     TailwindError,
     TailwindResponseError,
+    TailwindUnsupportedFirmwareVersionError,
 )
 from .models import (
     TailwindDeviceStatus,
@@ -67,4 +68,5 @@ __all__ = [
     "TailwindResponse",
     "TailwindResponseError",
     "TailwindResponseResult",
+    "TailwindUnsupportedFirmwareVersionError",
 ]
