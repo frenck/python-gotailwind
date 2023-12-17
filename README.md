@@ -78,7 +78,7 @@ To open a door:
 tailwind open --host 192.168.1.123
 ```
 
-For more details, access the build-in help of the CLI using the `--help` flag.
+For more details, access the built-in help of the CLI using the `--help` flag.
 
 ## Python usage
 
