@@ -16,6 +16,7 @@ from gotailwind.const import (
     TailwindResponseResult,
 )
 from gotailwind.exceptions import TailwindAuthenticationError, TailwindResponseError
+from gotailwind.util import tailwind_device_id_to_mac_address
 
 _RequestData = TypeVar("_RequestData")
 _ResponseT = TypeVar("_ResponseT")
@@ -141,9 +142,7 @@ class TailwindDeviceStatus(TailwindResponse):
     @property
     def mac_address(self) -> str:
         """Return the mac address."""
-        return ":".join(
-            [part.zfill(2) for part in self.device_id.strip("_").split("_")]
-        )
+        return tailwind_device_id_to_mac_address(self.device_id)
 
 
 @dataclass(kw_only=True)

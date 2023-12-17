@@ -33,8 +33,10 @@ from .models import (
     TailwindResponse,
 )
 from .tailwind import Tailwind
+from .util import tailwind_device_id_to_mac_address
 
 __all__ = [
+    "tailwind_device_id_to_mac_address",
     "Tailwind",
     "TailwindAuthenticationError",
     "TailwindConnectionError",
