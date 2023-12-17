@@ -1,5 +1,6 @@
 """Asynchronous Python client for Tailwind garage door openers."""
 from .const import (
+    MIN_REQUIRED_FIRMWARE_VERSION,
     TailwindDoorOperationCommand,
     TailwindDoorState,
     TailwindRequestType,
@@ -36,6 +37,7 @@ from .tailwind import Tailwind
 from .util import tailwind_device_id_to_mac_address
 
 __all__ = [
+    "MIN_REQUIRED_FIRMWARE_VERSION",
     "tailwind_device_id_to_mac_address",
     "Tailwind",
     "TailwindAuthenticationError",

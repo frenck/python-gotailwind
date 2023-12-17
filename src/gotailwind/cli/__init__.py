@@ -20,6 +20,7 @@ from gotailwind.exceptions import (
     TailwindConnectionError,
     TailwindDoorDisabledError,
     TailwindDoorLockedOutError,
+    TailwindUnsupportedFirmwareVersionError,
 )
 from gotailwind.tailwind import Tailwind
 
@@ -71,6 +72,26 @@ def connection_error_handler(_: TailwindConnectionError) -> None:
         message,
         expand=False,
         title="Connection error",
+        border_style="red bold",
+    )
+    console.print(panel)
+    sys.exit(1)
+
+
+@cli.error_handler(TailwindUnsupportedFirmwareVersionError)
+def unsupported_firmware_version_error_handler(
+    _: TailwindUnsupportedFirmwareVersionError,
+) -> None:
+    """Handle unsupported version errors."""
+    message = """
+    The specified Tailwind device is running an unsupported firmware version.
+
+    The tooling currently only supports firmware versions 10.10 and higher.
+    """
+    panel = Panel(
+        message,
+        expand=False,
+        title="Unsupported firmware version",
         border_style="red bold",
     )
     console.print(panel)

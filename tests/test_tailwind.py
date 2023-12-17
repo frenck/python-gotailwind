@@ -16,6 +16,7 @@ from gotailwind.exceptions import (
     TailwindDoorOperationError,
     TailwindDoorUnknownError,
     TailwindResponseError,
+    TailwindUnsupportedFirmwareVersionError,
 )
 from gotailwind.models import TailwindIdentifyRequest
 from gotailwind.tailwind import Tailwind
@@ -42,6 +43,25 @@ async def test_status(
     assert status == snapshot(name="object")
     assert status.to_json() == snapshot(name="json")
     assert status.mac_address == "3c:e9:0e:6d:21:84"
+
+
+async def test_unsupported_firmware_version(aresponses: ResponsesMockServer) -> None:
+    """Test trying to use an unsupported firmware version."""
+    aresponses.add(
+        "example.com",
+        "/json",
+        "POST",
+        aresponses.Response(
+            status=200,
+            text=load_fixture("device_status_unsupported.json"),
+        ),
+    )
+    async with Tailwind(host="example.com", token="12346") as tailwind:
+        with pytest.raises(
+            TailwindUnsupportedFirmwareVersionError,
+            match="Unsupported firmware version",
+        ):
+            await tailwind.status()
 
 
 @pytest.mark.parametrize("door", [1, "door1"])
