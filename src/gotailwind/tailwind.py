@@ -203,6 +203,7 @@ class Tailwind:
         Returns
         -------
             The Tailwind object.
+
         """
         return self
 
@@ -212,5 +213,6 @@ class Tailwind:
         Args:
         ----
             _exc_info: Exec type.
+
         """
         await self.close()
