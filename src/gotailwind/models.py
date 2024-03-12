@@ -1,4 +1,5 @@
 """Asynchronous Python client for Tailwind garage door openers."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
