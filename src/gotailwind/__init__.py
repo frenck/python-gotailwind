@@ -1,4 +1,5 @@
 """Asynchronous Python client for Tailwind garage door openers."""
+
 from .const import (
     MIN_REQUIRED_FIRMWARE_VERSION,
     TailwindDoorOperationCommand,
