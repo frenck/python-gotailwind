@@ -183,7 +183,7 @@ class AsyncTyper(SyncTyper):
         except Exit:
             raise
         # pylint: disable-next=broad-except
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             if (
                 not hasattr(self, "error_handlers")
                 or (handler := self.error_handlers.get(type(e))) is None
