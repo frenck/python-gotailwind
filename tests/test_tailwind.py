@@ -14,6 +14,7 @@ from gotailwind.const import TailwindDoorOperationCommand, TailwindDoorState
 from gotailwind.exceptions import (
     TailwindAuthenticationError,
     TailwindConnectionError,
+    TailwindDoorAlreadyInStateError,
     TailwindDoorOperationError,
     TailwindDoorUnknownError,
     TailwindResponseError,
@@ -384,7 +385,7 @@ async def test_operate_already_in_state(
     )
     async with Tailwind(host="example.com", token="12346") as tailwind:
         with pytest.raises(
-            TailwindDoorOperationError, match="already in the requested state"
+            TailwindDoorAlreadyInStateError, match="already in the requested state"
         ):
             await tailwind.operate(door="door1", operation=operation)
 
