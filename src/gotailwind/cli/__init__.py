@@ -455,8 +455,8 @@ async def test() -> None:
         )
 
         try:
-            while True:
-                await asyncio.sleep(0.5)
+            forever = asyncio.Event()
+            await forever.wait()
         except KeyboardInterrupt:
             pass
         finally:
