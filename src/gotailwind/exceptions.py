@@ -29,6 +29,10 @@ class TailwindDoorOperationError(TailwindError):
     """Tailwind door operation exception."""
 
 
+class TailwindDoorAlreadyInStateError(TailwindDoorOperationError):
+    """Tailwind already in state door exception."""
+
+
 class TailwindDoorDisabledError(TailwindDoorOperationError):
     """Tailwind disabled door exception."""
 

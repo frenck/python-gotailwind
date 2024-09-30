@@ -23,9 +23,9 @@ from gotailwind.const import (
 from .exceptions import (
     TailwindConnectionError,
     TailwindConnectionTimeoutError,
+    TailwindDoorAlreadyInStateError,
     TailwindDoorDisabledError,
     TailwindDoorLockedOutError,
-    TailwindDoorOperationError,
     TailwindDoorUnknownError,
 )
 from .models import (
@@ -163,7 +163,7 @@ class Tailwind:
             and door_status.state == TailwindDoorState.CLOSED
         ):
             msg = f"Door {door} is already in the requested state"
-            raise TailwindDoorOperationError(msg)
+            raise TailwindDoorAlreadyInStateError(msg)
 
         await self.request(
             TailwindDoorOperationRequest(
