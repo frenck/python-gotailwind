@@ -227,7 +227,7 @@ SOFTWARE.
 [github-sponsors]: https://github.com/sponsors/frenck
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
 [license-shield]: https://img.shields.io/github/license/frenck/python-gotailwind.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2023-2024.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2024.svg
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
 [poetry-install]: https://python-poetry.org/docs/#installation
