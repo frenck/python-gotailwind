@@ -2149,13 +2149,13 @@ files = [
 
 [[package]]
 name = "syrupy"
-version = "4.8.0"
+version = "4.8.2"
 description = "Pytest Snapshot Test Utility"
 optional = false
 python-versions = ">=3.8.1"
 files = [
-    {file = "syrupy-4.8.0-py3-none-any.whl", hash = "sha256:544f4ec6306f4b1c460fdab48fd60b2c7fe54a6c0a8243aeea15f9ad9c638c3f"},
-    {file = "syrupy-4.8.0.tar.gz", hash = "sha256:648f0e9303aaa8387c8365d7314784c09a6bab0a407455c6a01d6a4f5c6a8ede"},
+    {file = "syrupy-4.8.2-py3-none-any.whl", hash = "sha256:1fee874d422cfb1342aa746a65936d6500178beeb6fe26cb3a970c626fbe6058"},
+    {file = "syrupy-4.8.2.tar.gz", hash = "sha256:8418748be9cc050bf156d2e6c551dbc1768d591d36652e945a52ab3b0303a899"},
 ]
 
 [package.dependencies]
@@ -2464,4 +2464,4 @@ cli = ["typer"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "945f08616db1bc655397c916bb7aa35cc7c7a3ae6cbf18bf9aac6319a1a4dc27"
+content-hash = "da14bb5e19ed706eaac5808470decf448b6939645de8fc1a34c0093fbebad916"
