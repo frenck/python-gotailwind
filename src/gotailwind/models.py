@@ -65,7 +65,7 @@ class TailwindRequestData(BaseModel):
 
 
 @dataclass(kw_only=True)
-class TailwindRequest(Generic[_RequestData, _ResponseT], BaseModel):
+class TailwindRequest(BaseModel, Generic[_RequestData, _ResponseT]):
     """Base request object for Tailwind devices."""
 
     data: _RequestData
