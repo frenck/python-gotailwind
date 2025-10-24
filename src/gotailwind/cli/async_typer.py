@@ -22,11 +22,11 @@ Adaptation of the snippet/code from:
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Callable
 from functools import wraps
 from typing import (
     TYPE_CHECKING,
     Any,
-    Callable,
     ParamSpec,
     TypeVar,
 )
