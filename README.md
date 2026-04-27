@@ -8,7 +8,7 @@
 
 [![Build Status][build-shield]][build]
 [![Code Coverage][codecov-shield]][codecov]
-[![Quality Gate Status][sonarcloud-shield]][sonarcloud]
+[![OpenSSF Scorecard][scorecard-shield]][scorecard]
 [![Open in Dev Containers][devcontainer-shield]][devcontainer]
 
 [![Sponsor Frenck via GitHub Sponsors][github-sponsors-shield]][github-sponsors]
@@ -24,7 +24,7 @@ programmatically. It is mainly created to allow third-party programs to
 automate the behavior of a Tailwind device.
 
 Additionally, this package contains a CLI tool, which can be used standalone,
-proving a command-line interface to control and monitor Tailwind devices.
+providing a command-line interface to control and monitor Tailwind devices.
 
 Known compatible and tested Tailwind devices:
 
@@ -34,7 +34,7 @@ Known compatible and tested Tailwind devices:
 > This library requires your Tailwind device to run at least firmware version v10.10.
 
 For the development of this package, the hardware was kindly sponsored
-and provided by [Tailwind](https://gotailwind.com/); thank you! ❤️
+and provided by [Tailwind](https://gotailwind.com/); thank you! :heart:
 
 ## Installation
 
@@ -51,10 +51,11 @@ pip install gotailwind[cli]
 
 ## CLI usage
 
-The tailwind CLI tool provided in this library provides all the functionalities
-this library provides but from the command line.
+The `tailwind` CLI tool included in this library exposes all of its
+functionality from the command line.
 
 The CLI comes with built-in help, which can be accessed by using the `--help`
+flag:
 
 ```bash
 tailwind --help
@@ -91,7 +92,7 @@ from gotailwind import Tailwind, TailwindDoorOperationCommand, TailwindDoorState
 
 
 async def main() -> None:
-    """Show example of programmatically control a Tailwind garage door."""
+    """Show example of programmatically controlling a Tailwind garage door."""
     async with Tailwind(host="192.168.1.123", token="123456") as tailwind:
         # Get the device status
         status = await tailwind.status()
@@ -124,7 +125,7 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-## Changelog & releases
+## Changelog & Releases
 
 This repository keeps a change log using [GitHub's releases][releases]
 functionality. The format of the log is based on
@@ -148,34 +149,31 @@ We've set up a separate document for our
 
 Thank you for being involved! :heart_eyes:
 
-## Setting up a development environment
+## Setting up development environment
 
-The easiest way to start is by opening a CodeSpace here on GitHub, or by using
-the [Dev Container][devcontainer] feature of Visual Studio Code.
-
-[![Open in Dev Containers][devcontainer-shield]][devcontainer]
-
-This Python project is fully managed using the [Poetry][poetry] dependency manager. But also relies on the use of NodeJS for certain checks during development.
+This Python project is fully managed using the [Poetry][poetry] dependency
+manager, but also relies on the use of NodeJS for certain checks during
+development.
 
 You need at least:
 
 - Python 3.11+
 - [Poetry][poetry-install]
-- NodeJS 20+ (including NPM)
+- NodeJS 24+ (including NPM)
 
 To install all packages, including all development requirements:
 
 ```bash
 npm install
-poetry install --extras cli
+poetry install
 ```
 
-As this repository uses the [pre-commit][pre-commit] framework, all changes
+As this repository uses the [prek][prek] framework, all changes
 are linted and tested with each commit. You can run all checks and tests
 manually, using the following command:
 
 ```bash
-poetry run pre-commit run --all-files
+poetry run prek run --all-files
 ```
 
 To run just the Python tests:
@@ -195,7 +193,7 @@ check [the contributor's page][contributors].
 
 MIT License
 
-Copyright (c) 2023-2024 Franck Nijhof
+Copyright (c) 2023-2026 Franck Nijhof
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -217,7 +215,7 @@ SOFTWARE.
 
 [build-shield]: https://github.com/frenck/python-gotailwind/actions/workflows/tests.yaml/badge.svg
 [build]: https://github.com/frenck/python-gotailwind/actions/workflows/tests.yaml
-[codecov-shield]: https://codecov.io/gh/frenck/python-gotailwind/branch/master/graph/badge.svg
+[codecov-shield]: https://codecov.io/gh/frenck/python-gotailwind/branch/main/graph/badge.svg
 [codecov]: https://codecov.io/gh/frenck/python-gotailwind
 [contributors]: https://github.com/frenck/python-gotailwind/graphs/contributors
 [devcontainer-shield]: https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode
@@ -227,17 +225,17 @@ SOFTWARE.
 [github-sponsors]: https://github.com/sponsors/frenck
 [keepchangelog]: http://keepachangelog.com/en/1.0.0/
 [license-shield]: https://img.shields.io/github/license/frenck/python-gotailwind.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2024.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
 [patreon-shield]: https://frenck.dev/wp-content/uploads/2019/12/patreon.png
 [patreon]: https://www.patreon.com/frenck
 [poetry-install]: https://python-poetry.org/docs/#installation
 [poetry]: https://python-poetry.org
-[pre-commit]: https://pre-commit.com/
+[prek]: https://github.com/j178/prek
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-production%20ready-brightgreen.svg
 [pypi]: https://pypi.org/project/gotailwind/
 [python-versions-shield]: https://img.shields.io/pypi/pyversions/gotailwind
 [releases-shield]: https://img.shields.io/github/release/frenck/python-gotailwind.svg
 [releases]: https://github.com/frenck/python-gotailwind/releases
+[scorecard]: https://scorecard.dev/viewer/?uri=github.com/frenck/python-gotailwind
+[scorecard-shield]: https://api.scorecard.dev/projects/github.com/frenck/python-gotailwind/badge
 [semver]: http://semver.org/spec/v2.0.0.html
-[sonarcloud-shield]: https://sonarcloud.io/api/project_badges/measure?project=frenck_python-gotailwind&metric=alert_status
-[sonarcloud]: https://sonarcloud.io/summary/new_code?id=frenck_python-gotailwind

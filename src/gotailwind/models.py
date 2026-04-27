@@ -114,7 +114,7 @@ class TailwindDoor(BaseModel):
 
 @dataclass(kw_only=True)
 class TailwindDeviceStatus(TailwindResponse):
-    """Object holding the door status of a Tailwind connected garage doors."""
+    """Object holding the status of Tailwind connected garage doors."""
 
     device_id: str = field(metadata=field_options(alias="dev_id"))
     firmware_version: str = field(metadata=field_options(alias="fw_ver"))
@@ -148,7 +148,7 @@ class TailwindDeviceStatus(TailwindResponse):
 
     @property
     def mac_address(self) -> str:
-        """Return the mac address."""
+        """Return the MAC address."""
         return tailwind_device_id_to_mac_address(self.device_id)
 
 
@@ -171,7 +171,7 @@ class TailwindDeviceStatusRequest(
 
     @property
     def response_type(self) -> type[TailwindDeviceStatus]:
-        """Return the HTTP method for the request."""
+        """Return the response type."""
         return TailwindDeviceStatus
 
 
@@ -195,7 +195,7 @@ class TailwindIdentifyRequest(
 
     @property
     def response_type(self) -> type[TailwindResponse]:
-        """Return the HTTP method for the request."""
+        """Return the response type."""
         return TailwindResponse
 
 
@@ -226,7 +226,7 @@ class TailwindDoorOperationRequest(
 
     @property
     def response_type(self) -> type[TailwindResponse]:
-        """Return the HTTP method for the request."""
+        """Return the response type."""
         return TailwindResponse
 
 
@@ -256,5 +256,5 @@ class TailwindLEDBrightnessRequest(
 
     @property
     def response_type(self) -> type[TailwindResponse]:
-        """Return the HTTP method for the request."""
+        """Return the response type."""
         return TailwindResponse

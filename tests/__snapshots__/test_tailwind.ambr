@@ -64,7 +64,7 @@
 # name: test_operate_open[response]
   TailwindDoor(disabled=False, door_id='door1', index=0, locked_out=False, state=<TailwindDoorState.OPEN: 'open'>)
 # ---
-# name: test_operate_took_to_long[request]
+# name: test_operate_took_too_long[request]
   dict({
     'data': dict({
       'name': 'door_op',
