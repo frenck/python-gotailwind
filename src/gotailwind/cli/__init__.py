@@ -118,7 +118,7 @@ def door_disabled_error_handler(_: TailwindDoorDisabledError) -> None:
     """Handle disabled door operation errors."""
     console.print(
         Panel(
-            "🛑 [red]Door is disabled and can not be operated",
+            "🛑 [red]Door is disabled and cannot be operated",
             expand=False,
             title="Door operation error",
             border_style="red bold",
@@ -242,7 +242,7 @@ async def door_close(
     ] = 1,
 ) -> None:
     """Close a garage door."""
-    msg = "Door must be an number between 1 and 3"
+    msg = "Door must be a number between 1 and 3"
     try:
         door = int(door)
     except ValueError as err:
@@ -305,7 +305,7 @@ async def door_open(
     ] = 1,
 ) -> None:
     """Open a garage door."""
-    msg = "Door must be an number between 1 and 3"
+    msg = "Door must be a number between 1 and 3"
     try:
         door = int(door)
     except ValueError as err:
@@ -367,13 +367,13 @@ async def led(
     ] = 100,
 ) -> None:
     """Change the brightness of the status LED."""
-    msg = "Brightness must be an number between 0 and 100"
+    msg = "Brightness must be a number between 0 and 100"
     try:
-        door = int(brightness)
+        brightness = int(brightness)
     except ValueError as err:
         raise typer.BadParameter(msg) from err
 
-    if not 0 <= door <= 100:
+    if not 0 <= brightness <= 100:
         raise typer.BadParameter(msg)
 
     with console.status(
@@ -386,7 +386,7 @@ async def led(
 
 
 @cli.command("scan")
-async def test() -> None:
+async def scan() -> None:
     """Scan for Tailwind devices on the network."""
     zeroconf = AsyncZeroconf()
     background_tasks = set()

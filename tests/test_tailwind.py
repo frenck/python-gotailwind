@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-import asyncio
+import json
 from unittest.mock import patch
 
 import pytest
-from aiohttp import ClientResponse, ClientSession
-from aresponses import Response, ResponsesMockServer
+from aiohttp import ClientSession
+from aioresponses import CallbackResult, aioresponses
 from syrupy.assertion import SnapshotAssertion
 
 from gotailwind.const import TailwindDoorOperationCommand, TailwindDoorState
@@ -26,339 +26,302 @@ from gotailwind.tailwind import Tailwind
 from . import load_fixture
 
 
-async def test_status(
-    aresponses: ResponsesMockServer, snapshot: SnapshotAssertion
-) -> None:
+async def test_status(snapshot: SnapshotAssertion) -> None:
     """Test getting status from Tailwind device."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_open.json"),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        status = await tailwind.status()
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            status = await tailwind.status()
 
     assert status == snapshot(name="object")
     assert status.to_json() == snapshot(name="json")
     assert status.mac_address == "3c:e9:0e:6d:21:84"
 
 
-async def test_unsupported_firmware_version(aresponses: ResponsesMockServer) -> None:
+async def test_unsupported_firmware_version() -> None:
     """Test trying to use an unsupported firmware version."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_unsupported.json"),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        with pytest.raises(
-            TailwindUnsupportedFirmwareVersionError,
-            match="Unsupported firmware version",
-        ):
-            await tailwind.status()
+            body=load_fixture("device_status_unsupported.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            with pytest.raises(
+                TailwindUnsupportedFirmwareVersionError,
+                match="Unsupported firmware version",
+            ):
+                await tailwind.status()
 
 
 @pytest.mark.parametrize("door", [1, "door1"])
 async def test_door_status(
-    aresponses: ResponsesMockServer,
     snapshot: SnapshotAssertion,
     door: int | str,
 ) -> None:
     """Test getting door status from Tailwind device."""
+    with aioresponses() as mocked:
 
-    async def response_handler(request: ClientResponse) -> Response:
-        """Response handler for this test."""
-        data = await request.json()
-        assert data == snapshot(name="request")
-        return aresponses.Response(
-            status=200,
-            text=load_fixture("device_status_open.json"),
+        def request_callback(url, **kwargs):  # noqa: ARG001
+            data = json.loads(kwargs.get("data", "null"))
+            assert data == snapshot(name="request")
+            return CallbackResult(
+                status=200,
+                body=load_fixture("device_status_open.json"),
+                content_type="application/json",
+            )
+
+        mocked.post(
+            "http://example.com/json",
+            callback=request_callback,
         )
-
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        response_handler,
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        status = await tailwind.door_status(door=door)
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            status = await tailwind.door_status(door=door)
 
     assert status == snapshot(name="response")
 
 
-async def test_door_status_unknown_door(
-    aresponses: ResponsesMockServer,
-) -> None:
+async def test_door_status_unknown_door() -> None:
     """Test getting non-existing door status from Tailwind device."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_open.json"),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        with pytest.raises(TailwindDoorUnknownError, match="Door 42 not found"):
-            await tailwind.door_status(door="42")
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            with pytest.raises(TailwindDoorUnknownError, match="Door 42 not found"):
+                await tailwind.door_status(door="42")
 
 
-async def test_identify(
-    aresponses: ResponsesMockServer, snapshot: SnapshotAssertion
-) -> None:
+async def test_identify(snapshot: SnapshotAssertion) -> None:
     """Test the identify method."""
+    with aioresponses() as mocked:
 
-    async def response_handler(request: ClientResponse) -> Response:
-        """Response handler for this test."""
-        data = await request.json()
-        assert data == snapshot(name="request")
-        return aresponses.Response(
-            status=200,
-            text=load_fixture("ok_response.json"),
+        def request_callback(url, **kwargs):  # noqa: ARG001
+            data = json.loads(kwargs.get("data", "null"))
+            assert data == snapshot(name="request")
+            return CallbackResult(
+                status=200,
+                body=load_fixture("ok_response.json"),
+                content_type="application/json",
+            )
+
+        mocked.post(
+            "http://example.com/json",
+            callback=request_callback,
         )
-
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        response_handler,
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        await tailwind.identify()
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            await tailwind.identify()
 
 
-async def test_status_led(
-    aresponses: ResponsesMockServer, snapshot: SnapshotAssertion
-) -> None:
+async def test_status_led(snapshot: SnapshotAssertion) -> None:
     """Test the status led method."""
+    with aioresponses() as mocked:
 
-    async def response_handler(request: ClientResponse) -> Response:
-        """Response handler for this test."""
-        data = await request.json()
-        assert data == snapshot(name="request")
-        return aresponses.Response(
-            status=200,
-            text=load_fixture("ok_response.json"),
+        def request_callback(url, **kwargs):  # noqa: ARG001
+            data = json.loads(kwargs.get("data", "null"))
+            assert data == snapshot(name="request")
+            return CallbackResult(
+                status=200,
+                body=load_fixture("ok_response.json"),
+                content_type="application/json",
+            )
+
+        mocked.post(
+            "http://example.com/json",
+            callback=request_callback,
         )
-
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        response_handler,
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        await tailwind.status_led(brightness=42)
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            await tailwind.status_led(brightness=42)
 
 
-async def test_operate_open(
-    aresponses: ResponsesMockServer, snapshot: SnapshotAssertion
-) -> None:
+async def test_operate_open(snapshot: SnapshotAssertion) -> None:
     """Test operating the Tailwind doors."""
+    with aioresponses() as mocked:
 
-    async def response_handler(request: ClientResponse) -> Response:
-        """Response handler for this test."""
-        data = await request.json()
-        assert data == snapshot(name="request")
-        return aresponses.Response(
-            status=200,
-            text=load_fixture("ok_response.json"),
-        )
+        def request_callback(url, **kwargs):  # noqa: ARG001
+            data = json.loads(kwargs.get("data", "null"))
+            assert data == snapshot(name="request")
+            return CallbackResult(
+                status=200,
+                body=load_fixture("ok_response.json"),
+                content_type="application/json",
+            )
 
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+        # Initial status check
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_closed.json"),
-        ),
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        response_handler,
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
-            status=200,
-            text=load_fixture("device_status_closed.json"),
-        ),
-        repeat=2,
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
-            status=200,
-            text=load_fixture("device_status_open.json"),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        status = await tailwind.operate(
-            door="door1", operation=TailwindDoorOperationCommand.OPEN
+            body=load_fixture("device_status_closed.json"),
+            content_type="application/json",
         )
+        # Send operate command
+        mocked.post(
+            "http://example.com/json",
+            callback=request_callback,
+        )
+        # Poll 1: still closed
+        mocked.post(
+            "http://example.com/json",
+            status=200,
+            body=load_fixture("device_status_closed.json"),
+            content_type="application/json",
+        )
+        # Poll 2: still closed
+        mocked.post(
+            "http://example.com/json",
+            status=200,
+            body=load_fixture("device_status_closed.json"),
+            content_type="application/json",
+        )
+        # Poll 3: opened
+        mocked.post(
+            "http://example.com/json",
+            status=200,
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            status = await tailwind.operate(
+                door="door1", operation=TailwindDoorOperationCommand.OPEN
+            )
 
     assert status == snapshot(name="response")
 
 
-async def test_operate_close(
-    aresponses: ResponsesMockServer, snapshot: SnapshotAssertion
-) -> None:
+async def test_operate_close(snapshot: SnapshotAssertion) -> None:
     """Test operating the Tailwind doors."""
+    with aioresponses() as mocked:
 
-    async def response_handler(request: ClientResponse) -> Response:
-        """Response handler for this test."""
-        data = await request.json()
-        assert data == snapshot(name="request")
-        return aresponses.Response(
+        def request_callback(url, **kwargs):  # noqa: ARG001
+            data = json.loads(kwargs.get("data", "null"))
+            assert data == snapshot(name="request")
+            return CallbackResult(
+                status=200,
+                body=load_fixture("ok_response.json"),
+                content_type="application/json",
+            )
+
+        # Initial status check
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("ok_response.json"),
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
         )
-
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
-            status=200,
-            text=load_fixture("device_status_open.json"),
-        ),
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        response_handler,
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
-            status=200,
-            text=load_fixture("device_status_open.json"),
-        ),
-        repeat=2,
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
-            status=200,
-            text=load_fixture("device_status_closed.json"),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        status = await tailwind.operate(
-            door="door1", operation=TailwindDoorOperationCommand.CLOSE
+        # Send operate command
+        mocked.post(
+            "http://example.com/json",
+            callback=request_callback,
         )
-        assert status == snapshot(name="response")
-
-
-async def test_operate_took_to_long(
-    aresponses: ResponsesMockServer, snapshot: SnapshotAssertion
-) -> None:
-    """Test operating the Tailwind doors."""
-
-    async def response_handler(request: ClientResponse) -> Response:
-        """Response handler for this test."""
-        data = await request.json()
-        assert data == snapshot(name="request")
-        return aresponses.Response(
+        # Poll 1: still open
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("ok_response.json"),
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
         )
-
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+        # Poll 2: still open
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_open.json"),
-        ),
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        response_handler,
-    )
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
+        )
+        # Poll 3: closed
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_open.json"),
-        ),
-        repeat=2,
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        with patch("gotailwind.tailwind.OPERATION_WAIT_CYCLES", 1):
+            body=load_fixture("device_status_closed.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
             status = await tailwind.operate(
                 door="door1", operation=TailwindDoorOperationCommand.CLOSE
             )
-
-    # Reported state should still be open.
-    assert status.state == TailwindDoorState.OPEN
+            assert status == snapshot(name="response")
 
 
-async def test_operate_disabled(
-    aresponses: ResponsesMockServer,
-) -> None:
+async def test_operate_took_too_long(snapshot: SnapshotAssertion) -> None:
+    """Test operating the Tailwind doors."""
+    with aioresponses() as mocked:
+
+        def request_callback(url, **kwargs):  # noqa: ARG001
+            data = json.loads(kwargs.get("data", "null"))
+            assert data == snapshot(name="request")
+            return CallbackResult(
+                status=200,
+                body=load_fixture("ok_response.json"),
+                content_type="application/json",
+            )
+
+        # Initial status check
+        mocked.post(
+            "http://example.com/json",
+            status=200,
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
+        )
+        # Send operate command
+        mocked.post(
+            "http://example.com/json",
+            callback=request_callback,
+        )
+        # Single poll: still open (OPERATION_WAIT_CYCLES patched to 1)
+        mocked.post(
+            "http://example.com/json",
+            status=200,
+            body=load_fixture("device_status_open.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            with patch("gotailwind.tailwind.OPERATION_WAIT_CYCLES", 1):
+                status = await tailwind.operate(
+                    door="door1", operation=TailwindDoorOperationCommand.CLOSE
+                )
+
+        # Reported state should still be open.
+        assert status.state == TailwindDoorState.OPEN
+
+
+async def test_operate_disabled() -> None:
     """Test operating the Tailwind doors that are disabled."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_disabled.json"),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        with pytest.raises(TailwindDoorOperationError, match="is disabled"):
-            await tailwind.operate(
-                door="door1", operation=TailwindDoorOperationCommand.OPEN
-            )
+            body=load_fixture("device_status_disabled.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            with pytest.raises(TailwindDoorOperationError, match="is disabled"):
+                await tailwind.operate(
+                    door="door1", operation=TailwindDoorOperationCommand.OPEN
+                )
 
 
-async def test_operate_locked_out(
-    aresponses: ResponsesMockServer,
-) -> None:
+async def test_operate_locked_out() -> None:
     """Test operating the Tailwind doors that are in a locked out state."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_locked_out.json"),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        with pytest.raises(TailwindDoorOperationError, match="is locked out"):
-            await tailwind.operate(
-                door="door1", operation=TailwindDoorOperationCommand.OPEN
-            )
+            body=load_fixture("device_status_locked_out.json"),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            with pytest.raises(TailwindDoorOperationError, match="is locked out"):
+                await tailwind.operate(
+                    door="door1", operation=TailwindDoorOperationCommand.OPEN
+                )
 
 
 @pytest.mark.parametrize(
@@ -369,136 +332,114 @@ async def test_operate_locked_out(
     ],
 )
 async def test_operate_already_in_state(
-    aresponses: ResponsesMockServer,
     fixture: str,
     operation: TailwindDoorOperationCommand,
 ) -> None:
     """Test operating the Tailwind doors that are already in the requested state."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture(fixture),
-        ),
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        with pytest.raises(
-            TailwindDoorAlreadyInStateError, match="already in the requested state"
-        ):
-            await tailwind.operate(door="door1", operation=operation)
+            body=load_fixture(fixture),
+            content_type="application/json",
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            with pytest.raises(
+                TailwindDoorAlreadyInStateError,
+                match="already in the requested state",
+            ):
+                await tailwind.operate(door="door1", operation=operation)
 
 
-async def test_operate_with_door_object(
-    aresponses: ResponsesMockServer,
-) -> None:
-    """Test opering with a door status object works."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+async def test_operate_with_door_object() -> None:
+    """Test operating with a door status object works."""
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("device_status_locked_out.json"),
-        ),
-        repeat=2,
-    )
-    async with Tailwind(host="example.com", token="12346") as tailwind:
-        door_status = await tailwind.door_status(door="door1")
-        with pytest.raises(TailwindDoorOperationError, match="is locked out"):
-            await tailwind.operate(
-                door=door_status, operation=TailwindDoorOperationCommand.OPEN
-            )
+            body=load_fixture("device_status_locked_out.json"),
+            content_type="application/json",
+            repeat=True,
+        )
+        async with Tailwind(host="example.com", token="12346") as tailwind:
+            door_status = await tailwind.door_status(door="door1")
+            with pytest.raises(TailwindDoorOperationError, match="is locked out"):
+                await tailwind.operate(
+                    door=door_status, operation=TailwindDoorOperationCommand.OPEN
+                )
 
 
-async def test_request_with_shared_session(aresponses: ResponsesMockServer) -> None:
+async def test_request_with_shared_session() -> None:
     """Test a passed in shared session works as expected."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("ok_response.json"),
-        ),
-    )
-    async with ClientSession() as session:
-        tailwind = Tailwind(host="example.com", token="123456", session=session)
-        await tailwind.request(TailwindIdentifyRequest())
-        await tailwind.close()
+            body=load_fixture("ok_response.json"),
+            content_type="application/json",
+        )
+        async with ClientSession() as session:
+            tailwind = Tailwind(host="example.com", token="123456", session=session)
+            await tailwind.request(TailwindIdentifyRequest())
+            await tailwind.close()
 
 
-async def test_timeout(aresponses: ResponsesMockServer) -> None:
+async def test_timeout() -> None:
     """Test request timeout."""
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
+            exception=TimeoutError(),
+        )
+        async with Tailwind(
+            host="example.com",
+            token="123456",
+            request_timeout=1,
+        ) as tailwind:
+            with pytest.raises(TailwindConnectionError):
+                await tailwind.request(TailwindIdentifyRequest())
 
-    # Faking a timeout by sleeping
-    async def response_handler(_: ClientResponse) -> Response:
-        """Response handler for this test."""
-        await asyncio.sleep(8)
-        return aresponses.Response(
-            status=200,
-            text=load_fixture("ok_response.json"),
+
+async def test_http_error400() -> None:
+    """Test HTTP 404 response handling."""
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
+            status=404,
+            body="OMG PUPPIES!",
+            content_type="text/plain",
         )
 
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        response_handler,
-    )
-    async with Tailwind(
-        host="example.com",
-        token="123456",
-        request_timeout=1,
-    ) as tailwind:
-        with pytest.raises(TailwindConnectionError):
-            await tailwind.request(TailwindIdentifyRequest())
+        async with Tailwind(host="example.com", token="123456") as tailwind:
+            with pytest.raises(TailwindConnectionError):
+                await tailwind.request(TailwindIdentifyRequest())
 
 
-async def test_http_error400(aresponses: ResponsesMockServer) -> None:
-    """Test HTTP 404 response handling."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(text="OMG PUPPIES!", status=404),
-    )
-
-    async with Tailwind(host="example.com", token="123456") as tailwind:
-        with pytest.raises(TailwindConnectionError):
-            await tailwind.request(TailwindIdentifyRequest())
-
-
-async def test_unauthenticated_response(aresponses: ResponsesMockServer) -> None:
+async def test_unauthenticated_response() -> None:
     """Test authentication failure."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("token_fail.json"),
-        ),
-    )
+            body=load_fixture("token_fail.json"),
+            content_type="application/json",
+        )
 
-    async with Tailwind(host="example.com", token="123456") as tailwind:
-        with pytest.raises(TailwindAuthenticationError):
-            await tailwind.request(TailwindIdentifyRequest())
+        async with Tailwind(host="example.com", token="123456") as tailwind:
+            with pytest.raises(TailwindAuthenticationError):
+                await tailwind.request(TailwindIdentifyRequest())
 
 
-async def test_error_response(aresponses: ResponsesMockServer) -> None:
+async def test_error_response() -> None:
     """Test error failure."""
-    aresponses.add(
-        "example.com",
-        "/json",
-        "POST",
-        aresponses.Response(
+    with aioresponses() as mocked:
+        mocked.post(
+            "http://example.com/json",
             status=200,
-            text=load_fixture("fail_response.json"),
-        ),
-    )
+            body=load_fixture("fail_response.json"),
+            content_type="application/json",
+        )
 
-    async with Tailwind(host="example.com", token="123456") as tailwind:
-        with pytest.raises(TailwindResponseError, match="OMG Puppies!"):
-            await tailwind.request(TailwindIdentifyRequest())
+        async with Tailwind(host="example.com", token="123456") as tailwind:
+            with pytest.raises(TailwindResponseError, match="OMG Puppies!"):
+                await tailwind.request(TailwindIdentifyRequest())

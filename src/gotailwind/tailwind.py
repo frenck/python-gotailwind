@@ -93,7 +93,7 @@ class Tailwind:
             ClientError,
             socket.gaierror,
         ) as exception:
-            msg = "Error occurred while communicating to the Tailwind device"
+            msg = "Error occurred while communicating with the Tailwind device"
             raise TailwindConnectionError(msg) from exception
 
         response_text = await response.text()
@@ -142,7 +142,7 @@ class Tailwind:
         door: int | str | TailwindDoor,
         operation: TailwindDoorOperationCommand,
     ) -> TailwindDoor:
-        """Open the garage door."""
+        """Operate the garage door."""
         if isinstance(door, TailwindDoor):
             door = door.index
         door_status = await self.door_status(door=door)

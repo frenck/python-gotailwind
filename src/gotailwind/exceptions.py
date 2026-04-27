@@ -18,7 +18,7 @@ class TailwindResponseError(TailwindError):
 
 
 class TailwindAuthenticationError(TailwindResponseError):
-    """Tailwind connection exception."""
+    """Tailwind authentication exception."""
 
 
 class TailwindDoorUnknownError(TailwindError):

@@ -1,0 +1,34 @@
+---
+name: Issue
+description: Report an issue with the Tailwind Python client.
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear description of what the issue is.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The version of the Tailwind Python client.
+      placeholder: e.g., 0.3.0
+    validations:
+      required: true
+  - type: input
+    id: tailwind-firmware
+    attributes:
+      label: Tailwind firmware version
+      description: The firmware version of your Tailwind device.
+      placeholder: e.g., v10.10
+    validations:
+      required: false
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional information
+      description: Any logs, tracebacks, or other context.
+    validations:
+      required: false
