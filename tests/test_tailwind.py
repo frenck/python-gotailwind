@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -68,7 +69,7 @@ async def test_door_status(
     """Test getting door status from Tailwind device."""
     with aioresponses() as mocked:
 
-        def request_callback(url, **kwargs):  # noqa: ARG001
+        def request_callback(_url: Any, **kwargs: Any) -> CallbackResult:
             data = json.loads(kwargs.get("data", "null"))
             assert data == snapshot(name="request")
             return CallbackResult(
@@ -105,7 +106,7 @@ async def test_identify(snapshot: SnapshotAssertion) -> None:
     """Test the identify method."""
     with aioresponses() as mocked:
 
-        def request_callback(url, **kwargs):  # noqa: ARG001
+        def request_callback(_url: Any, **kwargs: Any) -> CallbackResult:
             data = json.loads(kwargs.get("data", "null"))
             assert data == snapshot(name="request")
             return CallbackResult(
@@ -126,7 +127,7 @@ async def test_status_led(snapshot: SnapshotAssertion) -> None:
     """Test the status led method."""
     with aioresponses() as mocked:
 
-        def request_callback(url, **kwargs):  # noqa: ARG001
+        def request_callback(_url: Any, **kwargs: Any) -> CallbackResult:
             data = json.loads(kwargs.get("data", "null"))
             assert data == snapshot(name="request")
             return CallbackResult(
@@ -147,7 +148,7 @@ async def test_operate_open(snapshot: SnapshotAssertion) -> None:
     """Test operating the Tailwind doors."""
     with aioresponses() as mocked:
 
-        def request_callback(url, **kwargs):  # noqa: ARG001
+        def request_callback(_url: Any, **kwargs: Any) -> CallbackResult:
             data = json.loads(kwargs.get("data", "null"))
             assert data == snapshot(name="request")
             return CallbackResult(
@@ -201,7 +202,7 @@ async def test_operate_close(snapshot: SnapshotAssertion) -> None:
     """Test operating the Tailwind doors."""
     with aioresponses() as mocked:
 
-        def request_callback(url, **kwargs):  # noqa: ARG001
+        def request_callback(_url: Any, **kwargs: Any) -> CallbackResult:
             data = json.loads(kwargs.get("data", "null"))
             assert data == snapshot(name="request")
             return CallbackResult(
@@ -254,7 +255,7 @@ async def test_operate_took_too_long(snapshot: SnapshotAssertion) -> None:
     """Test operating the Tailwind doors."""
     with aioresponses() as mocked:
 
-        def request_callback(url, **kwargs):  # noqa: ARG001
+        def request_callback(_url: Any, **kwargs: Any) -> CallbackResult:
             data = json.loads(kwargs.get("data", "null"))
             assert data == snapshot(name="request")
             return CallbackResult(

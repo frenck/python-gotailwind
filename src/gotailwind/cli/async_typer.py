@@ -51,7 +51,7 @@ class AsyncTyper(SyncTyper):
     error_handlers: dict[type[Exception], HandleErrorFunc]
 
     # pylint: disable-next=too-many-arguments, too-many-locals
-    def callback(  # type: ignore[override] # noqa: PLR0913
+    def callback(  # type: ignore[override] # ty: ignore[invalid-method-override] # noqa: PLR0913
         self,
         *,
         cls: type[TyperGroup] | None = None,
@@ -111,7 +111,7 @@ class AsyncTyper(SyncTyper):
         return decorator
 
     # pylint: disable-next=too-many-arguments
-    def command(  # type: ignore[override] # noqa: PLR0913
+    def command(  # type: ignore[override] # ty: ignore[invalid-method-override] # noqa: PLR0913
         self,
         name: str | None = None,
         *,
@@ -186,6 +186,6 @@ class AsyncTyper(SyncTyper):
             if not hasattr(self, "error_handlers"):
                 raise
             for cls in type(e).__mro__:
-                if (handler := self.error_handlers.get(cls)) is not None:
+                if (handler := self.error_handlers.get(cls)) is not None:  # type: ignore[arg-type] # ty: ignore[invalid-argument-type]
                     return handler(e)
             raise

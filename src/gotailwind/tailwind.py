@@ -72,10 +72,10 @@ class Tailwind:
     async def request(
         self,
         request: _TailwindRequestT,
-    ) -> _TailwindRequestT.response_type:  # type: ignore[name-defined]
+    ) -> _TailwindRequestT.response_type:  # type: ignore[name-defined] # ty: ignore[unresolved-attribute]
         """Handle a request to a Tailwind device."""
         if self.session is None:
-            self.session = ClientSession(json_serialize=orjson.dumps)  # type: ignore[arg-type]
+            self.session = ClientSession(json_serialize=orjson.dumps)  # type: ignore[arg-type] # ty: ignore[invalid-argument-type]
             self._close_session = True
         try:
             async with asyncio.timeout(self.request_timeout):
@@ -86,7 +86,7 @@ class Tailwind:
                     headers={"TOKEN": self.token},
                 )
                 response.raise_for_status()
-        except asyncio.TimeoutError as exception:
+        except TimeoutError as exception:
             msg = "Timeout occurred while connecting to the Tailwind device"
             raise TailwindConnectionTimeoutError(msg) from exception
         except (

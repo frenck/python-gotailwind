@@ -438,10 +438,10 @@ async def scan() -> None:
         table.add_row(
             f"{str(info.server).rstrip('.')}\n"
             + ", ".join(info.parsed_scoped_addresses()),
-            info.properties[b"product"].decode(),  # type: ignore[union-attr]
-            info.properties[b"device_id"].decode(),  # type: ignore[union-attr]
-            info.properties[b"HW ver"].decode(),  # type: ignore[union-attr]
-            info.properties[b"SW ver"].decode(),  # type: ignore[union-attr]
+            info.properties[b"product"].decode(),  # type: ignore[union-attr] # ty: ignore[unresolved-attribute]
+            info.properties[b"device_id"].decode(),  # type: ignore[union-attr] # ty: ignore[unresolved-attribute]
+            info.properties[b"HW ver"].decode(),  # type: ignore[union-attr] # ty: ignore[unresolved-attribute]
+            info.properties[b"SW ver"].decode(),  # type: ignore[union-attr] # ty: ignore[unresolved-attribute]
         )
 
     console.print("[green]Scanning for Tailwind devices...")

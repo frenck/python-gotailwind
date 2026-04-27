@@ -339,7 +339,7 @@ def test_error_handler_no_match_reraises() -> None:
     app = AsyncTyper()
 
     @app.error_handler(TailwindConnectionError)
-    def _handler(exc: TailwindConnectionError) -> None:
+    def _handler(_exc: TailwindConnectionError) -> None:
         pass
 
     with (
