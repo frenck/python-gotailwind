@@ -8,17 +8,17 @@
   "fw_ver": "10.10",
   "led_brightness": 100,
   "data": {
-      "door1": {
-          "index": 0,
-          "status": "close",
-          "lockup": 0,
-          "disabled": 0
-      },
-      "door2": {
-          "index": 1,
-          "status": "close",
-          "lockup": 0,
-          "disabled": 0
-      }
+    "door1": {
+      "index": 0,
+      "status": "close",
+      "lockup": 0,
+      "disabled": 0
+    },
+    "door2": {
+      "index": 1,
+      "status": "close",
+      "lockup": 0,
+      "disabled": 0
+    }
   }
 }
